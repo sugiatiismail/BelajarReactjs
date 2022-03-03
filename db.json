@@ -1,0 +1,24 @@
+{
+  "masyarakat": [
+    {
+      "id": 6,
+      "no_ktp": "1111111111",
+      "nama": "tttttttttt",
+      "alamat": "ttttttttttttt",
+      "agama": "Islam",
+      "hobby": "Menonton, Olahraga",
+      "jk": "Laki-laki",
+      "status": 2
+    },
+    {
+      "id": 7,
+      "no_ktp": "232",
+      "nama": "tes",
+      "alamat": "stes",
+      "agama": "Hindu",
+      "hobby": "Masak, Menonton",
+      "jk": "Perempuan",
+      "status": 2
+    }
+  ]
+}
