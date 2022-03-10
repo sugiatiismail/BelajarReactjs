@@ -15,6 +15,7 @@ import JenisData2 from './component/JenisData2';
 import Chat from './component/Chat';
 import ChatLayout from './component/ChatLayout';
 import Crud from './component/crud/Crud';
+import Crud1 from './component/crud1';
 import Crud2 from './component/crud2';
 import Crud3 from './component/crud3';
 import EditMasyarakat from './component/crud/EditMasyarakat';
@@ -77,6 +78,10 @@ export default function Index() {
           <AddMasyarakat/>
           </Route>
 
+          <Route path="/crud-1">
+          <Crud1/>
+          </Route>
+
           <Route path="/crud-2">
           <Crud2/>
           </Route>
@@ -84,7 +89,6 @@ export default function Index() {
           <Route path="/crud-3">
           <Crud3/>
           </Route>
-
         </Switch>
       </Router>
     </div>

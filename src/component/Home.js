@@ -72,12 +72,18 @@ const Home = () => {
         },
         {
             no: "11",
+            ket: "Crud 1 Json Server",
+            coding: "Klik",
+            link: `/crud-1`
+        },
+        {
+            no: "12",
             ket: "Crud 2 Json Server",
             coding: "Klik",
             link: `/crud-2`
         },
         {
-            no: "12",
+            no: "13",
             ket: "Crud 3 Json Server",
             coding: "Klik",
             link: `/crud-3`

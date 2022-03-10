@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -20,76 +21,43 @@ import Checkbox from '@mui/material/Checkbox';
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormLabel from '@mui/material/FormLabel';
 
 export default function Crud3() {
     const [masyarakat, setMasyarakat] = useState([]);
+    const [agama, setAgama] = useState([]);
+    const [hobby, setHobby] = useState([]);
     const [form, setForm] = useState({
         id: 0,
         no_ktp: "",
         nama: "",
         alamat: "",
         agama: "",
-        hobby: "",
-        jk: ""
+        hobby: [],
+        jk: {}
     });
 
-    var cekboxHobby = [
-        {
-            id: 1,
-            hobby: 'Masak',
-            status: false,
-        },
-        {
-            id: 2,
-            hobby: 'Menonton',
-            status: false,
+    // var cekboxHobby = [
+    //     {
+    //         id: 1,
+    //         hobby: 'Masak',
+    //         status: false,
+    //     },
+    //     {
+    //         id: 2,
+    //         hobby: 'Menonton',
+    //         status: false,
 
-        },
-        {
-            id: 3,
-            hobby: 'Olahraga',
-            status: false,
-        },
-    ];
+    //     },
+    //     {
+    //         id: 3,
+    //         hobby: 'Olahraga',
+    //         status: false,
+    //     },
+    // ];
 
-    const [hobby, setHobby] = useState(cekboxHobby);
+    // const [hobby, setHobby] = useState(cekboxHobby);
 
-
-    const handleChangeHobby = (e) => {
-        //handile change if pending selected
-        var newState = hobby.map((item) => {
-            //conditon if item id selected
-            if (parseInt(item.id) === parseInt(e.target.value)) {
-                return {
-                    ...item,
-                    status: item.status ? false : true,
-                };
-            }
-            return {
-                ...item,
-            };
-        });
-        setHobby(newState);
-    };
-
-    const handleSubmitHobby = () => {
-        //filter status = true
-        var newHobby = hobby
-            .filter((fl) => fl.status === true)
-            .map((item) => {
-                return item.hobby;
-            });
-        //replace array to stirng
-        var newState = {
-            ...form,
-            hobby: newHobby.join(', '),
-            status: 2
-        };
-        setForm(newState);
-        handleSubmit(newState)
-        console.log(newState);
-    };
+    
 
     const getData = async () => {
         const response = await fetch('http://localhost:8080/masyarakat');
@@ -97,8 +65,22 @@ export default function Crud3() {
         setMasyarakat(data);
     }
 
+    const getDataAgama = async () => {
+        const response = await fetch('http://localhost:8080/agama');
+        const data = await response.json();
+        setAgama(data);
+    }
+
+    const getDataHobby = async () => {
+        const response = await fetch('http://localhost:8080/hobby');
+        const data = await response.json();
+        setHobby(data);
+    }
+
     useEffect(() => {
         getData();
+        getDataAgama();
+        getDataHobby();
     }, []);
 
     const resetForm = () => {
@@ -108,7 +90,7 @@ export default function Crud3() {
             nama: "",
             alamat: "",
             agama: "",
-            hobby: "",
+            hobby: [],
             jk: ""
         })
     }
@@ -175,174 +157,212 @@ export default function Crud3() {
         });
         console.log(e.target.value)
     }
+    const handleChangeHobby = (e) => {
+        e.preventDefault();
+        // final resulrt
+        // ['Memasak', 'Musik']
+        var value = e.target.value;
+        // empty array
+        var newState = [];
+        // console.log(e.target.value);
+        // console.log(form.hobi);
+        // Count hoby if exist
+        var countHobi = form.hobby.filter((fl) => fl === value).length;
+        if (countHobi > 0) {
+            // remove value
+            newState = arrayRemove(form.hobby, value);
+        } else {
+            // insert to array
+            newState = [...form.hobby, value];
+        }
+        setForm({
+            ...form,
+            [e.target.name]: newState,
+        });
+    };
+
+    function arrayRemove(arr, value) {
+        return arr.filter(function (ele) {
+            return ele !== value;
+        });
+    }
 
 
     return (
-        <Container maxWidth='md'>
-            {JSON.stringify(form.agama)}
-            {JSON.stringify(form.nama)}
-            {JSON.stringify(form.hobby)}
-            {JSON.stringify(form.jk)}
+        <Container>
+            {JSON.stringify(form)}
 
-            <Box sx={{ mt: 10, mb: 4, display: 'flex', justifyContent: 'center' }}>
-                <Paper sx={{ padding: 2 }} >
-                    <form onSubmit={form.id > 0 ? handleUpdate : handleSubmit}>
-                        <Typography textAlign='center' variant="h6">TAMBAH DATA</Typography>
-                        <div className="field">
-                            <label className="label">NO KTP</label>
-                            <div className="control">
-                                <input className="input" onChange={handleChange} name="no_ktp" value={form.no_ktp} type="text" />
-                            </div>
-                        </div>
 
-                        <div className="field">
-                            <label className="label">NAMA</label>
-                            <div className="control">
-                                <input className="input" onChange={handleChange} name="nama" value={form.nama} type="text" />
-                            </div>
-                        </div>
+            <Grid container spacing={2}>
+                <Grid item>
+                    <Box sx={{ mt: 10, mb: 4, display: 'flex', justifyContent: 'center' }}>
+                        <Paper elevation={4} sx={{ padding: 2, paddingLeft: 6, paddingRight: 6 }} >
+                            <form onSubmit={form.id > 0 ? handleUpdate : handleSubmit}>
+                                <Typography textAlign='center' variant="h6">TAMBAH DATA</Typography>
+                                <div className="field">
+                                    <label className="label">NO KTP</label>
+                                    <div className="control">
+                                        <TextField id="outlined-basic" size="small" variant="outlined"
+                                            onChange={handleChange} name="no_ktp" value={form.no_ktp} />
+                                    </div>
+                                </div>
 
-                        <div className="field">
-                            <label className="label">ALAMAT</label>
-                            <div className="control">
-                                <input className="input" onChange={handleChange} name="alamat" value={form.alamat} type="text" />
-                            </div>
-                        </div>
+                                <div className="field">
+                                    <label className="label">NAMA</label>
+                                    <div className="control">
+                                        <TextField id="outlined-basic" size="small" variant="outlined"
+                                            onChange={handleChange} name="nama" value={form.nama} />
+                                    </div>
+                                </div>
 
-                        <div className="field">
-                            <label className="label">AGAMA</label>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Pilih</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={form.agama}
-                                    name="agama"
-                                    label="Agama"
-                                    defaultChecked={form.agama}
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={'Islam'}>Islam</MenuItem>
-                                    <MenuItem value={'Protestan'}>Protestan</MenuItem>
-                                    <MenuItem value={'Katolik'}>Katolik</MenuItem>
-                                    <MenuItem value={'Hindu'}>Hindu</MenuItem>
-                                    <MenuItem value={'Buddha'}>Buddha</MenuItem>
-                                    <MenuItem value={'Khonghucu'}>Khonghucu</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
+                                <div className="field">
+                                    <label className="label">ALAMAT</label>
+                                    <div className="control">
+                                        <TextField id="outlined-basic" size="small" variant="outlined"
+                                            onChange={handleChange} name="alamat" value={form.alamat} />
+                                    </div>
+                                </div>
 
-                        <div className="field">
-                            <label className="label">HOBBY</label>
-                            <FormGroup>
-                                {/* note looping */}
-                                {hobby.map((item) => (
-                                    <FormControlLabel
-                                        key={item.id}
-                                        control={<Checkbox  onChange={handleChangeHobby} label={item.hobby} value={item.id} />}
-                                        label={item.hobby}
-                                    />
-                                ))}
-                            </FormGroup>
-                        </div>
+                                <div className="field">
+                                    <label className="label">AGAMA</label>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Pilih</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={form.agama}
+                                            name="agama"
+                                            label="Agama"
+                                            defaultChecked={form.agama}
+                                            onChange={handleChange}
+                                        >
+                                            {agama && agama.map((item) => (
+                                                <MenuItem key={item.id} value={item.name}>{item.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </div>
 
-                        <div className="field">
-                            <Stack>
-                                <label className="label">JENIS KELAMIN</label>
-                                <FormControl>
-                                    <RadioGroup
-                                        row
-                                        aria-labelledby="demo-radio-buttons-group-label"
-                                        defaultValue={form.jk}
-                                        value={form.jk}
-                                        name="jk"
-                                        onChange={handleChange}
-                                    >
-                                        <FormControlLabel value="Laki-laki" control={<Radio />} label="Laki-laki" />
-                                        <FormControlLabel value="Perempuan" control={<Radio />} label="Perempuan" />
-                                    </RadioGroup>
-                                </FormControl>
-                            </Stack>
-                        </div>
+                                <div className="field">
+                                    <label className="label">HOBBY</label>
+                                    <FormGroup>
+                                        {/* note looping */}
+                                        {hobby.map((item) => (
+                                            <FormControlLabel
+                                                key={item.id}
+                                                control={
+                                                    <Checkbox checked={form.hobby.filter((fl) => fl === item.name).length > 0 ? true : false}
+                                                        onChange={handleChangeHobby} label={item.name} value={item.name} name='hobby' />}
+                                                label={item.name}
+                                            />
+                                        ))}
+                                    </FormGroup>
+                                </div>
 
-                        <div className="field">
-                            <div className="control">
-                                <Stack spacing={1} direction='row' sx={{ mt: 1 }}>
-                                    <Button size='small' variant="outlined" type="submit"
-                                        onClick={() => {
-                                            handleSubmitHobby();
-                                        }}
-                                    >Save</Button>
-                                </Stack>
-                            </div>
-                        </div>
-                    </form>
-                </Paper>
-            </Box>
+                                <div className="field">
+                                    <Stack>
+                                        <label className="label">JENIS KELAMIN</label>
+                                        <FormControl>
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-radio-buttons-group-label"
+                                                defaultValue={form.jk}
+                                                value={form.jk}
+                                                name="jk"
+                                                onChange={handleChange}
+                                            >
+                                                <FormControlLabel value="Laki-laki" control={<Radio />} label="Laki-laki" />
+                                                <FormControlLabel value="Perempuan" control={<Radio />} label="Perempuan" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </Stack>
+                                </div>
 
-            {/* {JSON.stringify(form)} */}
+                                <div className="field">
+                                    <div className="control">
+                                        <Stack spacing={1} direction='row' sx={{ mt: 1 }}>
+                                            <Button size='small' variant="outlined" type="submit"
+                                                onClick={() => {
+                                                    handleSubmit();
+                                                }}
+                                            >Save</Button>
+                                        </Stack>
+                                    </div>
+                                </div>
+                            </form>
+                        </Paper>
+                    </Box>
+                </Grid>
 
-            <Typography sx={{ mt: 10 }} textAlign='center' variant="h6">DATA MASYARAKAT</Typography>
-            <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
-                <Paper sx={{ padding: 4 }} >
-                    <Button sx={{ mb: 1 }} onClick={() => resetForm()} variant="outlined">
-                        Tambah Data
-                    </Button>
-                    <table id="table-app">
-                        <thead>
-                            <tr>
-                                <th>NO KTP</th>
-                                <th>NAMA</th>
-                                <th>ALAMAT</th>
-                                <th>AGAMA</th>
-                                <th>HOBBY</th>
-                                <th>JENIS KELAMIN</th>
-                                <th>ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {masyarakat.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.no_ktp}</td>
-                                    <td>{item.nama}</td>
-                                    <td>{item.alamat}</td>
-                                    <td>{item.agama}</td>
-                                    <td>{item.hobby}</td>
-                                    <td>{item.jk}</td>
-                                    <td>
+                <Grid item>
+                    {/* {JSON.stringify(form)} */}
 
-                                        <IconButton
-                                            sx={{ ml: 1, mr: 1 }}
-                                            onClick={() => setForm({
-                                                id: item.id,
-                                                no_ktp: item.no_ktp,
-                                                nama: item.nama,
-                                                alamat: item.alamat,
-                                                agama: item.agama,
-                                                hobby: item.hobby,
-                                                jk: item.jk,
-                                            })
+                    <Typography sx={{ mt: 10 }} textAlign='center' variant="h6">DATA MASYARAKAT</Typography>
+                    <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
+                        <Paper sx={{ padding: 4 }} >
+                            <Button sx={{ mb: 1 }} onClick={() => resetForm()} variant="outlined">
+                                Tambah Data
+                            </Button>
+                            <table id="table-app">
+                                <thead>
+                                    <tr>
+                                        <th>NO KTP</th>
+                                        <th>NAMA</th>
+                                        <th>ALAMAT</th>
+                                        <th>AGAMA</th>
+                                        <th>HOBBY</th>
+                                        <th>JENIS KELAMIN</th>
+                                        <th>ACTIONS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {masyarakat.map((item) => (
+                                        <tr key={item.id}>
+                                            <td>{item.no_ktp}</td>
+                                            <td>{item.nama}</td>
+                                            <td>{item.alamat}</td>
+                                            <td>{item.agama}</td>
+                                            <td>{item.hobby}</td>
+                                            <td>{item.jk}</td>
+                                            <td>
 
-                                            }
-                                            aria-label="delete" size="small">
-                                            <EditIcon fontSize="small" />
-                                        </IconButton>
+                                                <IconButton
+                                                    sx={{ ml: 1, mr: 1 }}
+                                                    onClick={() => setForm({
+                                                        id: item.id,
+                                                        no_ktp: item.no_ktp,
+                                                        nama: item.nama,
+                                                        alamat: item.alamat,
+                                                        agama: item.agama,
+                                                        hobby: item.hobby,
+                                                        jk: item.jk,
+                                                    })
 
-                                        <IconButton
-                                            onClick={() => deleteMasyarakat(item.id)}
-                                            aria-label="delete" size="small">
-                                            <DeleteOutlineIcon fontSize="small" />
-                                        </IconButton>
+                                                    }
+                                                    aria-label="delete" size="small">
+                                                    <EditIcon fontSize="small" />
+                                                </IconButton>
 
-                                    </td>
-                                </tr>
+                                                <IconButton
+                                                    onClick={() => deleteMasyarakat(item.id)}
+                                                    aria-label="delete" size="small">
+                                                    <DeleteOutlineIcon fontSize="small" />
+                                                </IconButton>
 
-                            ))}
+                                            </td>
+                                        </tr>
 
-                        </tbody>
-                    </table>
-                </Paper>
-            </Box>
+                                    ))}
+
+                                </tbody>
+                            </table>
+                        </Paper>
+                    </Box>
+                </Grid>
+            </Grid>
+
+
+
         </Container>
     )
 };

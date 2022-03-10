@@ -1,24 +1,78 @@
 {
   "masyarakat": [
     {
-      "id": 6,
+      "id": 1,
       "no_ktp": "1111111111",
-      "nama": "tttttttttt",
-      "alamat": "ttttttttttttt",
+      "nama": "sdfsds",
+      "alamat": "aa",
       "agama": "Islam",
-      "hobby": "Menonton, Olahraga",
-      "jk": "Laki-laki",
-      "status": 2
+      "hobby": [
+        "Masak",
+        "Menonton"
+      ],
+      "jk": "Perempuan"
     },
     {
-      "id": 7,
-      "no_ktp": "232",
-      "nama": "tes",
-      "alamat": "stes",
-      "agama": "Hindu",
-      "hobby": "Masak, Menonton",
-      "jk": "Perempuan",
-      "status": 2
+      "id": 3,
+      "no_ktp": "1111111111",
+      "nama": "tttttttttt",
+      "alamat": "sdf",
+      "agama": "Protestan",
+      "hobby": [
+        "Menonton",
+        "Olahraga"
+      ],
+      "jk": "Laki-laki"
+    },
+    {
+      "id": 4,
+      "no_ktp": "3333",
+      "nama": "sdfsds",
+      "alamat": "sasasa",
+      "agama": "Islam",
+      "hobby": [
+        "Masak",
+        "Menonton"
+      ],
+      "jk": "Perempuan"
+    },
+    {
+      "id": 5,
+      "no_ktp": "22222",
+      "nama": "sadasd",
+      "alamat": "aa",
+      "agama": "Islam",
+      "hobby": [
+        "Masak",
+        "Menonton"
+      ],
+      "jk": "Laki-laki"
+    }
+  ],
+  "agama": [
+    {
+      "id": 1,
+      "name": "Islam",
+      "status": "false"
+    },
+    {
+      "id": 2,
+      "name": "Kristen",
+      "status": "false"
+    }
+  ],
+  "hobby": [
+    {
+      "id": 1,
+      "name": "Masak"
+    },
+    {
+      "id": 2,
+      "name": "Menonton"
+    },
+    {
+      "id": 3,
+      "name": "Olahraga"
     }
   ]
 }
